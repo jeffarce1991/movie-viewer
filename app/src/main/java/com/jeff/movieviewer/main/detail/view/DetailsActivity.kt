@@ -13,6 +13,7 @@ import com.jeff.movieviewer.android.base.extension.*
 import com.jeff.movieviewer.database.local.Movie
 import com.jeff.movieviewer.databinding.ActivityDetailsBinding
 import com.jeff.movieviewer.main.detail.presenter.DetailsPresenter
+import com.jeff.movieviewer.main.seatmap.view.SeatMapActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.content_details.view.*
 import javax.inject.Inject
@@ -126,7 +127,8 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
                 .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
                 .into(binding.root.poster)
 
-            binding.viewSeatMap.setOnClickListener {  }
+            binding.viewSeatMap.setOnClickListener {
+                    movie -> SeatMapActivity.getStartIntent(this, movie.id) }
         }
     }
 
