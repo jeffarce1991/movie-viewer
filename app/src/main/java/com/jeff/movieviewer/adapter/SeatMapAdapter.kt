@@ -20,7 +20,7 @@ internal class SeatMapAdapter internal constructor(
     private var data: List<String>,
     private var availableSeats: List<String>
 ) : RecyclerView.Adapter<SeatMapAdapter.SeatMapViewHolder>() {
-    var selectedSeat : MutableList<String> = mutableListOf()
+    private var selectedSeat : MutableList<String> = mutableListOf()
     internal inner class SeatMapViewHolder(binding: SeatItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var itemLayout: LinearLayout = binding.seatItemLayout
