@@ -5,10 +5,12 @@
     <dimen name="screen_margin">16dp</dimen>
     <dimen name="screen_margin_small">12dp</dimen>
     <dimen name="screen_margin_xs">8dp</dimen>
-    <dimen name="app_bar_height">220dp</dimen>
+    <dimen name="app_bar_height">250dp</dimen>
 
     //Shimmer
-    <dimen name="placeholderTextHeight">17sp</dimen>
-    <dimen name="placeholderTextHeightHeadline6">22sp</dimen>
+    <dimen name="placeholderTextHeightSmall">12sp</dimen>
+    <dimen name="placeholderTextHeight">18sp</dimen>
+    <dimen name="placeholderTextHeight.Body">20sp</dimen>
+    <dimen name="placeholderTextHeight.Headline6">22sp</dimen>
 
 </resources>
