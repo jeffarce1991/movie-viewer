@@ -127,8 +127,10 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
                 .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
                 .into(binding.root.poster)
 
-            binding.viewSeatMap.setOnClickListener {
-                    movie -> SeatMapActivity.getStartIntent(this, movie.id) }
+            binding.viewSeatMap.setOnClickListener { movie ->
+                val intent = SeatMapActivity.getStartIntent(this, movie.id)
+                this.startActivity(intent)
+            }
         }
     }
 

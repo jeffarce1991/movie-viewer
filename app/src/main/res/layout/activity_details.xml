@@ -62,16 +62,26 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_dialog_email" />-->
-    <Button
-        android:id="@+id/view_seat_map"
-        style="@style/TextAppearance.MaterialComponents.Button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"
         app:layout_anchor="@id/content"
         app:layout_anchorGravity="bottom|end"
-        android:text="View Seat Map"/>
+        android:background="@color/colorAccent"
+        >
+
+        <Button
+            android:id="@+id/view_seat_map"
+            style="@style/TextAppearance.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="View Seat Map" />
+
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
