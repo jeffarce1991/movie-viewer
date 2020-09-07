@@ -2,19 +2,21 @@ package com.jeff.movieviewer.main.detail.view
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.hannesdorfmann.mosby.mvp.MvpActivity
-import com.jakewharton.picasso.OkHttp3Downloader
 import com.jeff.movieviewer.R
-import com.jeff.movieviewer.android.base.extension.hide
+import com.jeff.movieviewer.android.base.extension.*
+import com.jeff.movieviewer.database.local.Movie
 import com.jeff.movieviewer.databinding.ActivityDetailsBinding
 import com.jeff.movieviewer.main.detail.presenter.DetailsPresenter
-import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.content_details.view.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
@@ -56,8 +58,8 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
         binding = DataBindingUtil.setContentView(this, R.layout.activity_details)
 
         setupToolbar()
-        startShimmerAnimations()
-        setDetails(getUrl()!!, getTittle()!!)
+        detailsPresenter.loadMovie()
+        //setDetails(getUrl()!!, getTittle()!!)
         //userDetailsPresenter.loadUserDetails(getUserName()!!, getId()!!)
         //userDetailsPresenter.loadNotes(getId()!!)
         /*binding.root.save_notes.setOnClickListener {
@@ -76,33 +78,12 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.title = intent.getStringExtra(resources.getString(R.string.app_name))
+        supportActionBar!!.title = ""
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     override fun createPresenter(): DetailsPresenter {
         return detailsPresenter
-    }
-
-    private fun setDetails(url: String, title: String) {
-        val builder = Picasso.Builder(this)
-        builder.downloader(OkHttp3Downloader(this))
-        builder.build().load(url)
-            .placeholder(R.drawable.ic_launcher_background)
-            .error(R.drawable.ic_launcher_background)
-            .into(binding.headerImage)
-
-        binding.root.name.text = title
-
-        stopShimmerAnimations()
-        hideShimmerPlaceholders()
-
-        /*Glide
-            .with(this)
-            .load(url)
-            .centerCrop()
-            .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
-            .into(binding.headerImage)*/
     }
 
     /*override fun setNotes(notes: Notes) {
@@ -116,13 +97,55 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
             .show()
     }
 
+    override fun setMovieDetails(movie: Movie) {
+        movie.let {
+
+            binding.root.title.text = it.canonicalTitle
+            binding.root.genre.text = it.genre
+            binding.root.advisory_rating.text = String.format("Rated ${it.advisoryRating}")
+            binding.root.synopsis.text = it.synopsis
+
+
+            val cast = it.cast.joinToString { cast -> String.format(cast) }
+            binding.root.cast.text = String.substringWithDots( cast , 80)
+            binding.root.release_date.text = dateFormatToMMddyyyy(it.releaseDate)
+            val parsedFloat = it.runtimeMins.toFloatOrNull()
+            binding.root.duration.text = minuteToHHMM(parsedFloat!!.roundToInt())
+
+            Glide
+                .with(this)
+                .load(it.posterLandscape)
+                .centerCrop()
+                .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
+                .into(binding.posterLandscape)
+
+            Glide
+                .with(this)
+                .load(it.poster)
+                .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
+                .into(binding.root.poster)
+        }
+    }
+
     override fun startShimmerAnimations() {
         binding.root.shimmer_details_container.startShimmerAnimation()
         binding.root.shimmer_follows_container.startShimmerAnimation()
     }
 
     override fun hideShimmerPlaceholders() {
-        binding.root.name_shimmer.hide()
+        binding.root.title_shimmer.hide()
+        binding.root.advisory_rating_shimmer.hide()
+        binding.root.cast_shimmer.hide()
+        binding.root.genre_shimmer.hide()
+        binding.root.synopsis_shimmer.hide()
+        binding.root.synopsis2_shimmer.hide()
+        /*
+        binding.root.genre_shimmer.hide()
+        binding.root.advisory_rating_shimmer.hide()
+        binding.root.synopsis_shimmer.hide()
+        binding.root.cast_shimmer.hide()*/
+        binding.root.release_date_shimmer.hide()
+        binding.root.duration_shimmer.hide()
     }
 
     override fun stopShimmerAnimations() {
