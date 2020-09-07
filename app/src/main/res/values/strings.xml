@@ -1,7 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY app_name "Movie Viewer">
-    <!ENTITY db_name "mv-database.sql">
-    ]>
+<!DOCTYPE resources [<!ENTITY app_name "Movie Viewer"><!ENTITY db_name "mv-database.sql">]>
 <resources>
     <string name="db_name">&db_name;</string>
     <string name="app_name">&app_name;</string>
