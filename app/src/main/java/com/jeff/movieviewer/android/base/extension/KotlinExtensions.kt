@@ -8,13 +8,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.jeff.movieviewer.R
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
 fun String.Companion.substringWithDots(s: String, maxLength: Int) : String {
     return when {
         s.length >= maxLength -> {
-            String.format("${s.substring(0, maxLength)}…")
+            String.format("${s.substring(0, maxLength)}… See more")
         }
         else -> {
             s
@@ -120,5 +121,17 @@ fun formatNumberToAcronym(n : Int): String {
             n.toString()
         }
     }
+}
+
+fun minuteToHHMM(min: Int?): String {
+    val hours: Int = min!! / 60 //since both are ints, you get an int
+    val minutes: Int = min % 60
+    return "${hours}hr ${minutes}mins"
+}
+
+fun dateFormatToMMddyyyy(date: String?): String {
+    val parser = SimpleDateFormat("yyyy-MM-dd")
+    val formatter = SimpleDateFormat("MMMM dd, YYYY")
+    return formatter.format(parser.parse(date))
 }
 
