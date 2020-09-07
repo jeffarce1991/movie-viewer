@@ -23,14 +23,19 @@ class SeatMapActivity : AppCompatActivity() {
 
 
         ): Intent {
-            return Intent(context, DetailsActivity::class.java)
+            return Intent(context, SeatMapActivity::class.java)
                 .putExtra(EXTRA_ID, id)
         }
     }
 
+    private lateinit var binding : ActivitySeatMapBinding
+
+    private lateinit var adapter: SeatMapAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_seat_map)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_seat_map)
+
         // data to populate the RecyclerView with
         val data = listOf(
             "A33", "A(30)", "A32", "A31", "A30", "A29", "A28", "A27", "A26", "A25", "A24", "A(30)", "A23", "A22", "A21", "A20", "A19", "A18", "A17", "A16", "A15", "A14", "A13", "A12", "A11", "A10", "a(30)", "A9", "A8", "A7", "A6", "A5", "A4", "A3", "A2", "A1",
