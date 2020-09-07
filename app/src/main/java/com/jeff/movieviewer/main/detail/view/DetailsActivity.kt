@@ -59,6 +59,7 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
 
         setupToolbar()
         detailsPresenter.loadMovie()
+
         //setDetails(getUrl()!!, getTittle()!!)
         //userDetailsPresenter.loadUserDetails(getUserName()!!, getId()!!)
         //userDetailsPresenter.loadNotes(getId()!!)
@@ -124,6 +125,8 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
                 .load(it.poster)
                 .placeholder(ColorDrawable(resources.getColor(R.color.colorPrimary)))
                 .into(binding.root.poster)
+
+            binding.viewSeatMap.setOnClickListener {  }
         }
     }
 
