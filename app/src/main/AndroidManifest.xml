@@ -13,13 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.seatmap.view.SeatMapActivity"></activity>
+        <activity android:name=".main.seatmap.view.SeatMapActivity"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".main.list.view.MainActivity"
-            android:screenOrientation="fullUser"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".main.detail.view.DetailsActivity"
-            android:screenOrientation="fullUser">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
