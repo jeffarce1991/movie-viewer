@@ -93,25 +93,6 @@ constructor(private val remoteLoader: MovieRemoteLoader,
         return list
     }
 
-    /* TT = Times.Times */
-    private fun mapTTtoToTT(dtoList: List<TimeDto>)
-            : List<Schedule.Times.Time> {
-        val list : MutableList<Schedule.Times.Time> = mutableListOf()
-        for (t in dtoList) {
-            list.add(Schedule.Times.Time(
-                t.id,
-                t.label,
-                t.scheduleId,
-                t.popcornPrice,
-                t.popcornLabel,
-                t.seatingType,
-                t.price,
-                t.variant
-            ))
-        }
-        return list
-    }
-
     /* SEATMAP */
     private fun mapSeatMapDtoToSeatMap(dto: SeatMapDto): SeatMap {
         return SeatMap(
