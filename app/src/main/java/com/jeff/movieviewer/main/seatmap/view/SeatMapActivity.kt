@@ -73,6 +73,7 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
                 }
             }
         }
+        seatMapPresenter.loadSchedule()
 
         binding.root.clear_selected_seats.setOnClickListener {
             adapter.clearSelectedSeats()
