@@ -86,6 +86,79 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
         return seatMapPresenter
     }
 
+    override fun setSchedule(schedule: Schedule) {
+        setDate(schedule)
+        setCinemas(schedule)
+        setTimes(schedule)
+    }
+
+    private fun setDate(schedule: Schedule) {
+        val dateLabels: MutableList<String> = mutableListOf()
+        for (d in schedule.dates) {
+            dateLabels.add(d.label)
+        }
+        val datesSpinner = binding.root.dates
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dateLabels)
+        datesSpinner.adapter = spinnerAdapter
+        datesSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+    }
+
+    private fun setCinemas(schedule: Schedule) {
+        val cinemaLabels: MutableList<String> = mutableListOf()
+        for (c in schedule.cinemas) {
+            for (cc in c.cinemas) {
+                cinemaLabels.add(cc.label)
+            }
+        }
+        val cinemasSpinner = binding.root.cinemas
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cinemaLabels)
+        cinemasSpinner.adapter = adapter
+        cinemasSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+    }
+
+    private fun setTimes(schedule: Schedule) {
+        val timeLabels: MutableList<String> = mutableListOf()
+        for (t in schedule.times[0].times) {
+            timeLabels.add(t.label)
+        }
+        val timesSpinner = binding.root.times
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeLabels)
+        timesSpinner.adapter = spinnerAdapter
+        timesSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
+                val price = schedule.times[0].times[position].price
+                selectedSchedulePrice = price.toInt()
+                setTotal()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // write code to perform some action
+            }
+        }
+    }
     override fun generateSeatMap(seatMap: SeatMap) {
         val numberOfColumns = 36
         val compiledSeatMap = mutableListOf<String>()
