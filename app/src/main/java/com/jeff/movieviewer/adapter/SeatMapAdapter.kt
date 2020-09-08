@@ -1,7 +1,6 @@
 package com.jeff.movieviewer.adapter
 
 import android.content.Context
-import android.graphics.Color.blue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -20,7 +19,7 @@ internal class SeatMapAdapter internal constructor(
     private var data: List<String>,
     private var availableSeats: List<String>
 ) : RecyclerView.Adapter<SeatMapAdapter.SeatMapViewHolder>() {
-    private var selectedSeat : MutableList<String> = mutableListOf()
+    private var selectedSeats : MutableList<String> = mutableListOf()
     internal inner class SeatMapViewHolder(binding: SeatItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var itemLayout: LinearLayout = binding.seatItemLayout
@@ -53,20 +52,22 @@ internal class SeatMapAdapter internal constructor(
             }
         }
 
-
+        //holder.itemLayout.setOnClickListener { listener(data, position) }
         holder.itemLayout.setOnClickListener {
             Timber.d("==q ${data[position]}")
-                if (!selectedSeat.contains(data[position])) {
+            if (availableSeats.contains(data[position])) {
+                if (!selectedSeats.contains(data[position]) && availableSeats.contains(data[position])) {
                     Timber.d("==q RED")
                     setBackgroundColor(holder.itemLayout, R.color.red)
-                    selectedSeat.add(data[position])
+                    selectedSeats.add(data[position])
                 } else {
                     Timber.d("==q GRAY")
-                    selectedSeat.remove(data[position])
+                    selectedSeats.remove(data[position])
                     setBackgroundColor(holder.itemLayout, R.color.light_gray)
                 }
-            val context = context as SeatMapActivity
-            context.shortToast(data[position])
+            }
+            val activity = context as SeatMapActivity
+            activity.populateSelectedSeats(selectedSeats)
         }
     }
 
@@ -78,9 +79,16 @@ internal class SeatMapAdapter internal constructor(
     override fun getItemCount(): Int {
         return data.size
     }
-    
+
     // convenience method for getting data at click position
-    fun getItem(id: Int): String {
-        return data[ id]
+    fun getSelectedSeats(): MutableList<String> {
+        return selectedSeats
+    }
+
+    fun clearSelectedSeats() {
+        selectedSeats.clear()
+    }
+    interface OnItemClickListener {
+        fun onItemClick(item: List<String>?)
     }
 }
