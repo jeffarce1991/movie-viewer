@@ -1,13 +1,7 @@
 package com.jeff.movieviewer.supplychain.photo
 
-import com.jeff.movieviewer.database.local.AvailableSeats
-import com.jeff.movieviewer.database.local.Movie
-import com.jeff.movieviewer.database.local.Photo
-import com.jeff.movieviewer.database.local.SeatMap
-import com.jeff.movieviewer.main.mapper.PhotoDtoToPhotoMapper
-import com.jeff.movieviewer.webservices.dto.AvailableSeatsDto
-import com.jeff.movieviewer.webservices.dto.MovieDto
-import com.jeff.movieviewer.webservices.dto.SeatMapDto
+import com.jeff.movieviewer.database.local.*
+import com.jeff.movieviewer.webservices.dto.*
 import com.jeff.movieviewer.webservices.internet.RxInternet
 import com.jeff.movieviewer.webservices.usecase.loader.MovieRemoteLoader
 import io.reactivex.Observable
@@ -32,6 +26,12 @@ constructor(private val remoteLoader: MovieRemoteLoader,
             .flatMap { Single.just(it) }
     }
 
+    override fun loadSchedule(): Single<Schedule> {
+        return remoteLoader.loadSchedule()
+            .map { mapScheduleDtoToSchedule(it) }
+            //.flatMap { Single.fromObservable(localDetailsSaver.save(it)) }
+            .flatMap { Single.just(it) }
+    }
     private fun mapSeatMapDtoToSeatMap(dto: SeatMapDto): SeatMap {
         return SeatMap(
             "-1",
