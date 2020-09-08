@@ -26,9 +26,11 @@ data class Movie constructor(
     @ColumnInfo(name = "synopsis")
     var synopsis: String,
     @ColumnInfo(name = "cast")
-    var cast: List<String>) {
+    var cast: List<String>,
+    @ColumnInfo(name = "theatre")
+    var theatre: String) {
 
-    constructor() : this("-1", "", "", "", "", "", "", "", "", emptyList())
+    constructor() : this("-1", "", "", "", "", "", "", "", "", emptyList(), "")
 
     companion object {
         const val COLUMN_ID = "id"
