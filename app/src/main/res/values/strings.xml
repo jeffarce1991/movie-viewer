@@ -1,7 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY app_name "Movie Viewer">
-    <!ENTITY db_name "mv-database.sql">
-    ]>
+<!DOCTYPE resources [<!ENTITY app_name "Movie Viewer"><!ENTITY db_name "mv-database.sql">]>
 <resources>
     <string name="db_name">&db_name;</string>
     <string name="app_name">&app_name;</string>
@@ -12,4 +9,10 @@
     <string name="about_description">A Movie Viewer App, wherein shows Movie Details, Schedules and Seatmap availability. \n\n</string>
     <string name="notes">notes</string>
     <string name="save">save</string>
+    <string name="minimize">Minimize UI</string>
+    <string name="maximize">Maximize</string>
+    <string name="hide_gui">Hide GUI</string>
+    <string name="show_gui">Show GUI</string>
+    <string name="enter_fullscreen">Enter Fullscreen</string>
+    <string name="exit_fullscreen">Exit Fullscreen</string>
 </resources>

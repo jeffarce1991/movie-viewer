@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jeff.movieviewer">
 
@@ -5,24 +6,27 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.jeff.movieviewer.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.jeff.movieviewer.main.list.view.MainActivity"
-            android:screenOrientation="fullUser">
-        </activity>
+        <activity android:name=".main.seatmap.view.SeatMapActivity"
+            android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.jeff.movieviewer.main.detail.view.DetailsActivity"
-            android:screenOrientation="fullUser">
+            android:name=".main.list.view.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.detail.view.DetailsActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
