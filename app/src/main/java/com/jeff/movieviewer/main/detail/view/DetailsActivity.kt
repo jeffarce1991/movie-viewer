@@ -16,6 +16,7 @@ import com.jeff.movieviewer.main.detail.presenter.DetailsPresenter
 import com.jeff.movieviewer.main.seatmap.view.SeatMapActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.content_details.view.*
+import kotlinx.android.synthetic.main.content_seat_map.view.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -128,7 +129,7 @@ class DetailsActivity : MvpActivity<DetailsView, DetailsPresenter>(),
                 .into(binding.root.poster)
 
             binding.viewSeatMap.setOnClickListener { movie ->
-                val intent = SeatMapActivity.getStartIntent(this, movie.id)
+                val intent = SeatMapActivity.getStartIntent(this, movie.id, it.theatre)
                 this.startActivity(intent)
             }
         }
