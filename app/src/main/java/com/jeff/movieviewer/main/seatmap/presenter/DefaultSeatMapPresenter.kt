@@ -3,6 +3,7 @@ package com.jeff.movieviewer.main.seatmap.presenter
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter
 import com.jeff.movieviewer.Constants
 import com.jeff.movieviewer.database.local.Photo
+import com.jeff.movieviewer.database.local.Schedule
 import com.jeff.movieviewer.database.local.SeatMap
 import com.jeff.movieviewer.database.usecase.local.loader.PhotoLocalLoader
 import com.jeff.movieviewer.database.usecase.local.saver.PhotoLocalSaver
@@ -27,7 +28,7 @@ import javax.inject.Inject
 
 class DefaultSeatMapPresenter @Inject
 constructor(
-    private val internet: RxInternet,
+    private val rxInternet: RxInternet,
     private val loader: MovieLoader,
     private val schedulerUtils: RxSchedulerUtils
 ) : MvpBasePresenter<SeatMapView>(),
@@ -38,11 +39,39 @@ constructor(
     lateinit var disposable: Disposable
 
     override fun loadSeatMap() {
-        loader.loadSeatMap()
+        rxInternet.isConnected()
+            .andThen(loader.loadSeatMap())
             .compose(schedulerUtils.forSingle())
             .subscribe(object : SingleObserver<SeatMap>{
                 override fun onSuccess(t: SeatMap) {
                     view.generateSeatMap(t)
+                    view.hideProgressBar()
+                    dispose()
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    disposable = d
+                    view.showProgressBar()
+                }
+
+                override fun onError(e: Throwable) {
+                    Timber.e(e)
+                    view.showMessage(e.message!!)
+                    view.hideProgressBar()
+                    dispose()
+                }
+            })
+
+    }
+
+    override fun loadSchedule() {
+        rxInternet.isConnected()
+            .andThen(loader.loadSchedule())
+            .compose(schedulerUtils.forSingle())
+            .subscribe(object : SingleObserver<Schedule>{
+                override fun onSuccess(t: Schedule) {
+                    Timber.d("==q $t")
+                    view.setSchedule(t)
                     dispose()
                 }
 
@@ -52,6 +81,7 @@ constructor(
 
                 override fun onError(e: Throwable) {
                     Timber.e(e)
+                    view.showMessage(e.message!!)
                     dispose()
                 }
             })

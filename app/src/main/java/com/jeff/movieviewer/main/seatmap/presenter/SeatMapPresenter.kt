@@ -6,4 +6,5 @@ import com.jeff.movieviewer.main.seatmap.view.SeatMapView
 
 interface SeatMapPresenter: MvpPresenter<SeatMapView> {
     fun loadSeatMap()
+    fun loadSchedule()
 }
