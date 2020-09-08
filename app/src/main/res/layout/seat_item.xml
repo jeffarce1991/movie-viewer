@@ -10,14 +10,18 @@
         <LinearLayout
             android:id="@+id/seat_item_layout"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/screen_margin_large"
-            android:layout_width="100dp"
-            android:layout_height="100dp">
+            android:layout_margin="@dimen/screen_margin_xs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
+                style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:id="@+id/seat_number"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:padding="@dimen/screen_margin_xs"
+                android:layout_margin="@dimen/screen_margin_xs"
                 android:gravity="center"/>
 
         </LinearLayout>
