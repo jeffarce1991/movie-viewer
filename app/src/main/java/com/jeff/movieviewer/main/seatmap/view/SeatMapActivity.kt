@@ -80,6 +80,49 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
             clearSelectedSeats()
         }
 
+    private var isFullScreened = false
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.fullscreen_enter ->         //add the function to perform here
+            {
+                binding.root.header_layout.hide()
+                binding.root.selected_seats_layout.hide()
+                binding.root.bottom_card_view.hide()
+                //binding.root.zoom_layout.setAlignment(Alignment.CENTER)
+                //binding.root.zoom_layout.rotation = 90f
+                isFullScreened = true
+                invalidateOptionsMenu()
+
+            }
+            R.id.fullscreen_exit ->         //add the function to perform here
+            {
+                binding.root.header_layout.show()
+                binding.root.selected_seats_layout.show()
+                binding.root.bottom_card_view.show()
+                //binding.root.zoom_layout.rotation = 0f
+                //binding.root.zoom_layout.setAlignment(Alignment.TOP)
+
+
+                isFullScreened = false
+                invalidateOptionsMenu()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_main, menu)
+        val fullScreenExitItem = menu!!.findItem(R.id.fullscreen_exit)
+        val fullscreenEnterItem = menu.findItem(R.id.fullscreen_enter)
+        if (isFullScreened) {
+            fullscreenEnterItem.isVisible = false
+            fullScreenExitItem.isVisible = true
+        } else {
+            fullscreenEnterItem.isVisible = true
+            fullScreenExitItem.isVisible = false
+        }
+        return true
     }
 
     override fun createPresenter(): SeatMapPresenter {
