@@ -3,17 +3,23 @@ package com.jeff.movieviewer.main.seatmap.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.jeff.movieviewer.R
 import com.jeff.movieviewer.adapter.SeatMapAdapter
-import com.jeff.movieviewer.android.base.extension.shortToast
+import com.jeff.movieviewer.android.base.extension.hide
+import com.jeff.movieviewer.android.base.extension.show
+import com.jeff.movieviewer.database.local.Schedule
 import com.jeff.movieviewer.database.local.SeatMap
 import com.jeff.movieviewer.databinding.ActivitySeatMapBinding
 import com.jeff.movieviewer.main.seatmap.presenter.SeatMapPresenter
@@ -27,17 +33,22 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
 
     companion object {
         private var EXTRA_ID = "EXTRA_ID"
+        private var EXTRA_THEATRE = "EXTRA_THEATRE"
 
         fun getStartIntent(
             context: Context,
-            id : Int
+            id: Int,
+            theatre: String
 
 
         ): Intent {
             return Intent(context, SeatMapActivity::class.java)
                 .putExtra(EXTRA_ID, id)
+                .putExtra(EXTRA_THEATRE, theatre)
         }
     }
+    private var selectedSchedulePrice: Int? = 0
+    private var seatMap: SeatMap? = null
 
     private lateinit var binding : ActivitySeatMapBinding
 
@@ -51,28 +62,9 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_seat_map)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_seat_map)
+        setupToolbar()
 
         seatMapPresenter.loadSeatMap()
-
-        val dates = listOf("Apr 05, Wed", "Apr 08, Thu", "Apr 15, Fri")
-        // access the spinner
-        val spinner = binding.root.dates
-        if (spinner != null) {
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dates)
-            spinner.adapter = adapter
-
-            spinner.onItemSelectedListener = object :
-                AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View, position: Int, id: Long) {
-                    shortToast("Selected Date is ${dates[position]}")
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    // write code to perform some action
-                }
-            }
-        }
         seatMapPresenter.loadSchedule()
 
         binding.root.clear_selected_seats.setOnClickListener {
@@ -80,6 +72,9 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
             clearSelectedSeats()
         }
 
+        binding.root.theatre.text = String.format("Theatre : ${getTheatre()}")
+
+    }
     private var isFullScreened = false
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -125,8 +120,17 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
         return true
     }
 
+    private fun getTheatre(): String? = intent.getStringExtra(EXTRA_THEATRE)
+
     override fun createPresenter(): SeatMapPresenter {
         return seatMapPresenter
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+
+        supportActionBar!!.title = ""
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     override fun setSchedule(schedule: Schedule) {
@@ -207,6 +211,7 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
         binding.content.total.text = String.format("Total : ${adapter.getSelectedSeats()!!.size * selectedSchedulePrice!!}")
     }
     override fun generateSeatMap(seatMap: SeatMap) {
+        this.seatMap = seatMap
         val numberOfColumns = 36
         val compiledSeatMap = mutableListOf<String>()
         for(s in seatMap.seatmap) {
@@ -215,17 +220,18 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
             }
         }
 
+
         binding.root.seatMapRecyclerView.layoutManager = GridLayoutManager(this, numberOfColumns)
         adapter = SeatMapAdapter(
             this,
             compiledSeatMap,
-            seatMap.availableSeats.available)
+            seatMap.availableSeats.available
+        )
         binding.root.seatMapRecyclerView.adapter = adapter
     }
 
+
     fun populateSelectedSeats(selectedSeats: MutableList<String>) {
-
-
         if (selectedSeats.isEmpty()) {
             clearSelectedSeats()
         } else {
@@ -240,22 +246,42 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
     private fun clearSelectedSeats() {
         binding.root.selected_seats_layout.removeAllViews()
         addTextViewToLayout("")
-        setTotal()
+        setTotalPrice()
+        generateSeatMap(this.seatMap!!)
     }
 
     private fun addTextViewToLayout(s: String) {
         val params: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         params.setMargins(8, 8, 8, 8)
         val selectedSeat = TextView(this)
         selectedSeat.textSize = 20f
         selectedSeat.text = s
         selectedSeat.background = getDrawable(R.color.red)
+        selectedSeat.setTextColor(resources.getColor(R.color.white))
         selectedSeat.layoutParams = params
 
         // add TextView to LinearLayout
         binding.root.selected_seats_layout.addView(selectedSeat)
     }
+
+    override fun showMessage(message: String) {
+        Snackbar.make(
+            binding.coordLayout,
+            message,
+            Snackbar.LENGTH_SHORT
+        )
+            .show()
+    }
+
+    override fun showProgressBar() {
+        binding.content.progressbar.show()
+    }
+    override fun hideProgressBar() {
+        binding.content.progressbar.hide()
+    }
 }
+
