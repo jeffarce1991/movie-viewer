@@ -194,13 +194,17 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
             ) {
                 val price = schedule.times[0].times[position].price
                 selectedSchedulePrice = price.toInt()
-                setTotal()
+                setTotalPrice()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // write code to perform some action
             }
         }
+    }
+
+    private fun setTotalPrice() {
+        binding.content.total.text = String.format("Total : ${adapter.getSelectedSeats()!!.size * selectedSchedulePrice!!}")
     }
     override fun generateSeatMap(seatMap: SeatMap) {
         val numberOfColumns = 36
@@ -230,11 +234,13 @@ class SeatMapActivity : MvpActivity<SeatMapView, SeatMapPresenter>(),
                 addTextViewToLayout(s)
             }
         }
+        setTotalPrice()
     }
 
     private fun clearSelectedSeats() {
         binding.root.selected_seats_layout.removeAllViews()
         addTextViewToLayout("")
+        setTotal()
     }
 
     private fun addTextViewToLayout(s: String) {
