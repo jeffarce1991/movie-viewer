@@ -41,32 +41,36 @@ internal class SeatMapAdapter internal constructor(
         holder: SeatMapViewHolder,
         position: Int
     ) {
-        //holder.txtSeatNumber.text = data[position]
+        holder.txtSeatNumber.text = data[position]
         if (data[position].capitalize() == "A(30)") {
-            holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.white))
+            holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.blank))
         } else {
             if (availableSeats.contains(data[position])) {
-                holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.light_gray))
+                holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.available))
             } else {
-                holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.blue))
+                holder.itemLayout.setBackgroundColor(context!!.getColor(R.color.reserved))
             }
         }
 
         //holder.itemLayout.setOnClickListener { listener(data, position) }
         holder.itemLayout.setOnClickListener {
+            val activity = context as SeatMapActivity
             Timber.d("==q ${data[position]}")
             if (availableSeats.contains(data[position])) {
                 if (!selectedSeats.contains(data[position]) && availableSeats.contains(data[position])) {
                     Timber.d("==q RED")
-                    setBackgroundColor(holder.itemLayout, R.color.red)
+                    setBackgroundColor(holder.itemLayout, R.color.selected)
                     selectedSeats.add(data[position])
                 } else {
                     Timber.d("==q GRAY")
                     selectedSeats.remove(data[position])
-                    setBackgroundColor(holder.itemLayout, R.color.light_gray)
+                    setBackgroundColor(holder.itemLayout, R.color.available)
+                    activity.showMessage("${data[position]} is unselected.")
                 }
+            } else {
+                //RESERVED
+                activity.showMessage("${data[position]} is already reserved.")
             }
-            val activity = context as SeatMapActivity
             activity.populateSelectedSeats(selectedSeats)
         }
     }
@@ -80,9 +84,11 @@ internal class SeatMapAdapter internal constructor(
         return data.size
     }
 
-    // convenience method for getting data at click position
-    fun getSelectedSeats(): MutableList<String> {
+    fun getSelectedSeats(): MutableList<String>? {
         return selectedSeats
+    }
+    fun getSelectedSeatsSize(): Int? {
+        return selectedSeats.size
     }
 
     fun clearSelectedSeats() {

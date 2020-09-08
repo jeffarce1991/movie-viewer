@@ -14,17 +14,17 @@ data class SeatMap constructor(
     @ColumnInfo(name = "genre")
     var availableSeats: AvailableSeats) {
 
+    data class AvailableSeats (
+        var available: List<String>,
+        var seatCount: Int
+    ) {
+        constructor() : this(listOf(), -1)
+    }
+
     constructor() : this("", listOf<List<String>>(listOf()), AvailableSeats())
 
     companion object {
         const val COLUMN_ID = "id"
         const val TABLE_NAME = "seatmaps"
     }
-}
-
-data class AvailableSeats (
-    var available: List<String>,
-    var seatCount: Int
-) {
-    constructor() : this(listOf(), -1)
 }
