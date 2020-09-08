@@ -9,3 +9,4 @@ Impemented tech stacks:
   - RxJava
   - AndroidX
   - Recylerview
+  - ZoomLayout
