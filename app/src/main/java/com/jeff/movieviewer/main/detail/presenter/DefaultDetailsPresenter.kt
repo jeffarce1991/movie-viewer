@@ -25,7 +25,8 @@ constructor(
 
     lateinit var disposable: Disposable
     override fun loadMovie() {
-        loader.loadMovie()
+        rxInternet.isConnected()
+            .andThen(loader.loadMovie())
             .delay(1,TimeUnit.SECONDS)
             .compose(rxScheduler.forSingle())
             .subscribe(object : SingleObserver<Movie>{
